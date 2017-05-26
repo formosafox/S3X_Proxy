@@ -1,11 +1,13 @@
-// 修改日期：2017-05-25
+// 修改日期：2017-05-26
 // ************************************************************************
-// S3X_Proxy
+// S3X_Proxy：提供多個 Client 連線
 // ************************************************************************
+// 零件清單：ESP01S、TTL轉RS485硬體自動流向控制模組、LED*2、R220電阻*2、
+//           AMS1117 3.3V 電源降壓模組、Micro USB 母座 PCB 轉接板
 // 設定建議：ESP01S 請選用 【Flash Size 1M(64K SPIFFS)】避免 OTA 上傳有問題
 //           ESP8266的快閃記憶體結構 https://swf.com.tw/?p=905
-// 更新注意：利用 OTA 上傳有時會卡住因而 UART 瘋狂亂送訊息造成 主機(P31) 收
-//           到錯誤資訊造成水溫設定錯亂 
+// 注意事項：利用 OTA 上傳有時會卡住造成 UART 瘋狂亂送訊息造成 主機(P31) 收
+//           到錯誤資訊造成水溫設定錯亂
 // ************************************************************************
 // http://arduino.tw/allarticlesindex/2009-09-06-18-37-08/169-arduinohd.html
 #include <EEPROM.h> 
@@ -193,7 +195,6 @@ void WebServer_Run() {
                                                           // 沒有 Client 要求上傳資料時，其時間差大都在 100 之內
                                                           // 因應 Client 要求上傳資料會占用時間，清除接收區資料免得發生封包錯誤
   if((micros()-KeepTime) > 200) myS3X.Clear_ReceiveBuffer();
-  //Serial.println(micros()-KeepTime);
 }
 // ************************************************************************
 // Web 網頁：【/】
@@ -229,12 +230,10 @@ void Web_Root() {
   content += "</td></tr>";
   content += (String)"<tr><td colspan='2'>封包錯誤：" + myS3X.PacketErrorCount() + "</td></tr>";
   content += "<tr><td colspan='2'>IP：" + IP_To_String(WiFi.localIP()) + "</td></tr>";
-  if (myConfig.S3X_RunModeIndex == S3X_SimMode) {
-    content += "<tr style='background-color:#DCDCDC'><td colspan='2' align='center'>";
-    content += "<input type='button' value='強制加熱' onclick=\"location.href='/ForcedHeating'\">&emsp;";
-    content += "<input type='button' value='水溫設定' onclick=\"location.href='/SetTem'\">";
-    content += "</td></tr>";
-  }
+  content += "<tr style='background-color:#DCDCDC'><td colspan='2' align='center'>";
+  content += "<input type='button' value='強制加熱' onclick=\"location.href='/ForcedHeating'\">&emsp;";
+  content += "<input type='button' value='水溫設定' onclick=\"location.href='/SetTem'\">";
+  content += "</td></tr>";
   content += "</table><br>";
   content += "<input type='button' value='設定' onclick=\"location.href='/Setup'\">&emsp;";
   content += "<input type='button' value='重開機' onclick=\"location.href='/Reboot'\">&emsp;";
