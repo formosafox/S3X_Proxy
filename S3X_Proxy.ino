@@ -84,8 +84,8 @@ void setup() {
   //-------------------------------------------------------
   IO_Init();                                              // IO 設置
   //-------------------------------------------------------
-  LED_ON_OFF(Pin_WiFi_LED,500,5);
-  LED_ON_OFF(Pin_WiFi_LED,100,25);
+  LED_Blink(Pin_WiFi_LED,500,5);
+  LED_Blink(Pin_WiFi_LED,100,25);
   //-------------------------------------------------------
   LoadConfig();                                           // 載入設定
   //-------------------------------------------------------
@@ -519,11 +519,11 @@ void IO_Init() {
 }
 // ************************************************************************
 // LED 閃爍
-void LED_ON_OFF(byte Pin_LED, unsigned int DelayTime, byte Count) {
-  for (byte CX=0; CX<Count; CX++) {
-    digitalWrite(Pin_LED, HIGH);                  // 設定LED：ON
+void LED_Blink(byte Pin_LED, unsigned int DelayTime, byte Count) {
+  for (unsigned int CX=0; CX<Count; CX++) {
+    digitalWrite(Pin_LED, !digitalRead(Pin_LED));         // 設定LED：反向
     delay(DelayTime/2);
-    digitalWrite(Pin_LED, LOW);                   // 設定LED：OFF
+    digitalWrite(Pin_LED, !digitalRead(Pin_LED));         // 設定LED：反向
     delay(DelayTime/2);
   }
 }
