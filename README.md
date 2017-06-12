@@ -13,3 +13,4 @@ S3X Proxy
 2. 連上名稱 S3X-Proxy_XXXXXX 無線 SSID。
 3. 連入 http://192.168.4.1 網頁。
 4. 按【設定】修改相關設定。
+> ![S3X_Proxy-設定](S3X_Proxy-設定.png)
